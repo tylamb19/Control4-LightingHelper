@@ -8,5 +8,9 @@ Ambient lighting monitoring is completed by first selecting your devices in the 
 
 **This driver is NOT endorsed or created by Control4. I am just a dealer and programmer who loves the product.**
 
+### Installation
+
+Head over to the releases page (https://github.com/tylamb19/Control4-LightingHelper/releases) and download the latest .c4z file. Add this driver to your Control4 system, and you should be good to go.
+
 Any questions or issues, please open an issue or pull request at:
 https://github.com/tylamb19/Control4-LightingHelper
