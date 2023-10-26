@@ -1,11 +1,11 @@
 <devicedata>
   <copyright>Copyright 2023 Lamb Networks. </copyright>
   <manufacturer>Tyler Lamb</manufacturer>
-  <version>1.0.1</version>
+  <version>101</version>
   <creator>Tyler Lamb</creator>
   <created>08/01/2023 10:42:00 AM</created>
   <modified>10/25/2023 11:35 PM</modified>
-  <model>Lighting Helper 1.0</model>
+  <model>Lighting Helper</model>
   <name>Lighting Helper</name>
   <small>devices_sm/panel_light.png</small>
   <large>devices_lg/panel_light.png</large>
@@ -24,13 +24,13 @@
     <properties>
       <property>
         <name>Driver Version</name>
-        <default>1.0.1</default>
+        <default>101</default>
         <type>STRING</type>
         <readonly>true</readonly>
       </property>
       <property>
         <name>Debug Mode</name>
-        <default>1.0</default>
+        <default>Off</default>
         <type>LIST</type>
         <items>
                   <item>Off</item>

@@ -296,6 +296,11 @@ function EC.Replace_lighting_status_LED_color(tParams)
     end
 end
 
+function OPC.Driver_Version(tParams)
+	dbg("Driver Version is:" .. C4:GetDeviceData(C4:GetDeviceID(), "version"))
+	C4:UpdateProperty("Driver Version",tostring(C4:GetDeviceData(C4:GetDeviceID(), "version")))
+end
+
 function OPC.Ambient_Light_Devices(tParams)
     dbg("device update time" .. dump(tParams))
     for deviceID in string.gmatch(tParams, '([^,]+)') do
@@ -344,7 +349,7 @@ function ReceivedFromProxy(idBinding, strCommand, tParams)
 		tParams.ARGS = nil
 	end
 
-	dbg('ReceivedFromProxy: ' .. idBinding, strCommand)
+	dbg('ReceivedFromProxy: ' .. idBinding .. " " .. strCommand)
 
 	local success, ret
 
@@ -357,13 +362,13 @@ function ReceivedFromProxy(idBinding, strCommand, tParams)
 	if (success == true) then
 		return (ret)
 	elseif (success == false) then
-		dbg('ReceivedFromProxy error: ', ret, idBinding, strCommand)
+		dbg('ReceivedFromProxy error: '.. ret .. " " .. idBinding .. " " .. strCommand)
 	end
 end
 
 function ExecuteCommand(strCommand, tParams)
 	tParams = tParams or {}
-	dbg('ExecuteCommand: ' .. strCommand, dump(tParams))
+	dbg('ExecuteCommand: ' .. strCommand .. " " .. dump(tParams))
 
 	if (strCommand == 'LUA_ACTION') then
 		if (tParams.ACTION) then
@@ -383,7 +388,7 @@ function ExecuteCommand(strCommand, tParams)
 	if (success == true) then
 		return (ret)
 	elseif (success == false) then
-		dbg('ExecuteCommand error: ', ret, strCommand)
+		dbg('ExecuteCommand error: ' .. ret .. " " .. strCommand)
 	end
 end
 
