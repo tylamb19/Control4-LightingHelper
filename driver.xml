@@ -43,15 +43,17 @@
         <name>Ambient Light Devices</name>
         <type>DEVICE_SELECTOR</type>
         <items>
-          <item>forward_phase_dimmer.c4i</item>
-              <item>adaptive_phase_dimmer.c4i</item>
-              <item>switch_gen3.c4i</item>
-              <item>combo_dimmer.c4i</item>
-              <item>fan_speed_controller.c4i</item>
-              <item>0_10v_dimmer.c4i</item>
-	            <item>configurable_keypad.c4i</item>
-              <item>control4_wired_keypad.c4i</item>
-              <item>keypad_proxy.c4i</item>
+            <item>forward_phase_dimmer.c4i</item>
+            <item>adaptive_phase_dimmer.c4i</item>
+            <item>switch_gen3.c4i</item>
+            <item>combo_dimmer.c4i</item>
+            <item>combo_switch.c4i</item>
+            <item>control4_lights_gen3_split_dimmable_light.c4i</item>
+            <item>fan_speed_controller.c4i</item>
+            <item>0_10v_dimmer.c4i</item>
+	          <item>configurable_keypad.c4i</item>
+            <item>control4_wired_keypad.c4i</item>
+            <item>keypad_proxy.c4i</item>
         </items>
         <multiselect>true</multiselect>
         <readonly>false</readonly>
