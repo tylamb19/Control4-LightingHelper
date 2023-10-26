@@ -1,0 +1,275 @@
+<devicedata>
+  <copyright>Copyright 2023 Lamb Networks. </copyright>
+  <manufacturer>Tyler Lamb</manufacturer>
+  <version>1.0</version>
+  <creator>Tyler Lamb</creator>
+  <created>08/01/2023 10:42:00 AM</created>
+  <modified>10/25/2023 11:35 PM</modified>
+  <model>Lighting Helper 1.0</model>
+  <name>Lighting Helper</name>
+  <small>devices_sm/panel_light.png</small>
+  <large>devices_lg/panel_light.png</large>
+  <proxies>
+    <proxy name="Lighting Helper">lighting_helper</proxy>
+  </proxies>
+  <driver>DriverWorks</driver>
+  <control>lua_gen</control>
+  <combo>true</combo>
+  <controlmethod>other</controlmethod>
+  <composer_categories>
+    <category>Lighting</category>
+  </composer_categories>
+  <config>
+    <script jit="1" file="driver.lua"></script>
+    <properties>
+      <property>
+        <name>Driver Version</name>
+        <default>1.0</default>
+        <type>STRING</type>
+        <readonly>true</readonly>
+      </property>
+      <property>
+        <name>Debug Mode</name>
+        <default>1.0</default>
+        <type>LIST</type>
+        <items>
+                  <item>Off</item>
+                  <item>Print</item>
+                  <item>Log</item>
+                  <item>Print and Log</item>
+              </items>
+      </property>
+      <property>
+        <name>Ambient Light Devices</name>
+        <type>DEVICE_SELECTOR</type>
+        <items>
+          <item>forward_phase_dimmer.c4i</item>
+              <item>adaptive_phase_dimmer.c4i</item>
+              <item>switch_gen3.c4i</item>
+              <item>combo_dimmer.c4i</item>
+              <item>fan_speed_controller.c4i</item>
+              <item>0_10v_dimmer.c4i</item>
+	            <item>configurable_keypad.c4i</item>
+              <item>control4_wired_keypad.c4i</item>
+              <item>keypad_proxy.c4i</item>
+        </items>
+        <multiselect>true</multiselect>
+        <readonly>false</readonly>
+      </property>
+    </properties>
+    <actions>
+    </actions>
+    <commands>
+      <command>
+        <name>Dim all keypad status LEDs</name>
+        <description>Dim all currently on status LEDs on Devices PARAM1 by a factor of PARAM2</description>
+        <params>
+          <param>
+            <name>Device List</name>
+            <type>DEVICE_SELECTOR</type>
+            <items>
+	            <item>configurable_keypad.c4i</item>
+              <item>control4_wired_keypad.c4i</item>
+              <item>keypad_proxy.c4i</item>
+            </items>
+            <multiselect>true</multiselect>
+            <default> </default>
+          </param>
+          <param>
+                <name>Dimming Factor</name>
+                <type>RANGED_INTEGER</type>
+                <minimum>1</minimum>
+                <maximum>50</maximum>
+            </param>
+        </params>
+      </command>
+      <command>
+        <name>Brighten all keypad status LEDs</name>
+        <description>Brighten all currently on status LEDs on Devices PARAM1 by a factor of PARAM2</description>
+        <params>
+          <param>
+            <name>Device List</name>
+            <type>DEVICE_SELECTOR</type>
+            <items>
+	            <item>configurable_keypad.c4i</item>
+              <item>control4_wired_keypad.c4i</item>
+              <item>keypad_proxy.c4i</item>
+            </items>
+            <multiselect>true</multiselect>
+            <default> </default>
+          </param>
+            <param>
+                <name>Brighten Factor</name>
+                <type>RANGED_INTEGER</type>
+                <minimum>1</minimum>
+                <maximum>50</maximum>
+            </param>
+        </params>
+      </command>
+      <command>
+        <name>Replace keypad status LED color</name>
+        <description>Replace the ON Color of any status LED on Devices PARAM1 which matches color PARAM2 with PARAM3</description>
+        <params>
+          <param>
+            <name>Device List</name>
+            <type>DEVICE_SELECTOR</type>
+            <items>
+	            <item>configurable_keypad.c4i</item>
+              <item>control4_wired_keypad.c4i</item>
+              <item>keypad_proxy.c4i</item>
+            </items>
+            <multiselect>true</multiselect>
+            <default> </default>
+          </param>
+            <param>
+              <name>Old Color</name>
+              <type>COLOR_SELECTOR</type>
+            <default>0,0,0</default>
+          </param>
+          <param>
+            <name>New Color</name>
+            <type>COLOR_SELECTOR</type>
+            <default>0,0,0</default>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>Replace lighting status LED color</name>
+        <description>Replace the Color of any status LED on Devices PARAM1 which matches color PARAM2 with PARAM3</description>
+        <params>
+          <param>
+            <name>Device List</name>
+            <type>DEVICE_SELECTOR</type>
+            <items>
+	            <item>light_v2.c4i</item>
+            </items>
+            <multiselect>true</multiselect>
+            <default> </default>
+          </param>
+            <param>
+              <name>Old Color</name>
+              <type>COLOR_SELECTOR</type>
+            <default>0,0,0</default>
+          </param>
+          <param>
+            <name>New Color</name>
+            <type>COLOR_SELECTOR</type>
+            <default>0,0,0</default>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>Adjust status LED configuration</name>
+        <description>Change the status LED configuration on Devices PARAM1</description>
+        <params>
+          <param>
+            <name>Device List</name>
+            <type>DEVICE_SELECTOR</type>
+            <items>
+	            <item>light_v2.c4i</item>
+	            <item>configurable_keypad.c4i</item>
+              <item>control4_wired_keypad.c4i</item>
+              <item>keypad_proxy.c4i</item>
+            </items>
+            <multiselect>true</multiselect>
+            <default> </default>
+          </param>
+            <param>
+              <name>Min LED Brightness</name>
+              <type>RANGED_INTEGER</type>
+              <minimum>0</minimum>
+              <maximum>255</maximum>
+              <default>0</default>
+          </param>
+           <param>
+              <name>Max LED Brightness</name>
+              <type>RANGED_INTEGER</type>
+              <minimum>0</minimum>
+              <maximum>255</maximum>
+              <default>255</default>
+          </param>
+          <param>
+              <name>Dark Room Threshold</name>
+              <type>RANGED_INTEGER</type>
+              <minimum>0</minimum>
+              <maximum>255</maximum>
+              <default>10</default>
+          </param>
+          <param>
+              <name>Bright Room Threshold</name>
+              <type>RANGED_INTEGER</type>
+              <minimum>0</minimum>
+              <maximum>255</maximum>
+              <default>200</default>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>Adjust backlight LED configuration</name>
+        <description>Change the backlight LED configuration on Devices PARAM1</description>
+        <params>
+          <param>
+            <name>Device List</name>
+            <type>DEVICE_SELECTOR</type>
+            <items>
+	            <item>light_v2.c4i</item>
+	            <item>configurable_keypad.c4i</item>
+              <item>control4_wired_keypad.c4i</item>
+              <item>keypad_proxy.c4i</item>
+            </items>
+            <multiselect>true</multiselect>
+            <default> </default>
+          </param>
+            <param>
+              <name>Min Backlight Brightness</name>
+              <type>RANGED_INTEGER</type>
+              <minimum>0</minimum>
+              <maximum>255</maximum>
+              <default>0</default>
+          </param>
+           <param>
+              <name>Max Backlight Brightness</name>
+              <type>RANGED_INTEGER</type>
+              <minimum>0</minimum>
+              <maximum>255</maximum>
+              <default>255</default>
+          </param>
+          <param>
+              <name>Dark Room Threshold</name>
+              <type>RANGED_INTEGER</type>
+              <minimum>0</minimum>
+              <maximum>255</maximum>
+              <default>5</default>
+          </param>
+          <param>
+              <name>Dim Room Threshold</name>
+              <type>RANGED_INTEGER</type>
+              <minimum>0</minimum>
+              <maximum>255</maximum>
+              <default>20</default>
+          </param>
+          <param>
+              <name>Off in High Brightness</name>
+              <type>LIST</type>
+              <items>
+                  <item>True</item>
+                  <item>False</item>
+              </items>
+          </param>
+          <param>
+              <name>Bright Room Threshold</name>
+              <type>RANGED_INTEGER</type>
+              <minimum>0</minimum>
+              <maximum>245</maximum>
+              <default>255</default>
+          </param>
+        </params>
+      </command>
+    </commands>
+    <documentation file="documentation.rtf" />
+  </config>
+  <events />
+  <connections>
+  </connections>
+  <capabilities />
+</devicedata>
