@@ -1,7 +1,7 @@
 <devicedata>
   <copyright>Copyright 2023 Lamb Networks. </copyright>
   <manufacturer>Tyler Lamb</manufacturer>
-  <version>1.0</version>
+  <version>1.0.1</version>
   <creator>Tyler Lamb</creator>
   <created>08/01/2023 10:42:00 AM</created>
   <modified>10/25/2023 11:35 PM</modified>
@@ -24,7 +24,7 @@
     <properties>
       <property>
         <name>Driver Version</name>
-        <default>1.0</default>
+        <default>1.0.1</default>
         <type>STRING</type>
         <readonly>true</readonly>
       </property>
@@ -62,6 +62,29 @@
     <actions>
     </actions>
     <commands>
+    <command>
+        <name>Set backlight color</name>
+        <description>Set backlight color on devices PARAM1 to color PARAM2</description>
+        <params>
+          <param>
+            <name>Device List</name>
+            <type>DEVICE_SELECTOR</type>
+            <items>
+              <item>light_v2.c4i</item>
+	            <item>configurable_keypad.c4i</item>
+              <item>control4_wired_keypad.c4i</item>
+              <item>keypad_proxy.c4i</item>
+            </items>
+            <multiselect>true</multiselect>
+            <default> </default>
+          </param>
+          <param>
+            <name>Color</name>
+            <type>COLOR_SELECTOR</type>
+            <default>0,0,0</default>
+          </param>
+        </params>
+      </command>
       <command>
         <name>Dim all keypad status LEDs</name>
         <description>Dim all currently on status LEDs on devices PARAM1 by a factor of PARAM2</description>
@@ -208,7 +231,7 @@
       </command>
       <command>
         <name>Adjust backlight LED configuration</name>
-        <description>Change the backlight LED configuration on devices PARAM1 to min brightness of PARAM2 and max brightness of PARAM3, with dark room at PARAM4; dim room at PARAM5; bright room at PARAM6 and off in bright room PARAM7</description>
+        <description>Change the backlight LED configuration on devices PARAM1 to min brightness of PARAM2 and max brightness of PARAM3, with dark room at PARAM4; dim room at PARAM5; bright room at PARAM7 and off in bright room PARAM6</description>
         <params>
           <param>
             <name>Device List</name>

@@ -18,6 +18,17 @@ function EC.AMBIENT_LIGHT_LEVEL(tParams)
     RFP.AMBIENT_LIGHT_LEVEL(0, tParams)
 end
 
+function EC.Set_backlight_color(tParams)
+	local list = tParams["Device List"] or ""
+	local rgb = tParams["Color"] or ""
+	if (list == "") or (rgb == "") then return end
+	for deviceID in string.gmatch(tParams["Device List"], '([^,]+)') do
+		local numID = tonumber(deviceID) or 0
+    	if (numID == 0) then break end
+		C4:SendToDevice(numID, "SET_BACKLIGHT_COLOR", {COLOR = GetColor("", rgb)})
+	end
+end
+
 function EC.Adjust_backlight_LED_configuration(tParams)
 	local list = tParams["Device List"] or ""
 	local minBrightness = tonumber(tParams["Min Backlight Brightness"]) or 0
@@ -26,6 +37,7 @@ function EC.Adjust_backlight_LED_configuration(tParams)
 	local dimRoomThreshold = tonumber(tParams["Dim Room Threshold"]) or 0
 	local offInHighBrightness = tParams["Off in High Brightness"] or "False"
 	local brightRoomThreshold = tonumber(tParams["Bright Room Threshold"]) or 0
+	if (list == "") or (minBrightness == "") or (maxBrightness == "") or (darkRoomThreshold == "") or (dimRoomThreshold == "") or (offInHighBrightness == "") or (brightRoomThreshold == "") then dbg("one or more values blank, cancelling") return end
 	if(minBrightness >= maxBrightness) then
 		minBrightness = maxBrightness - 1
 		dbg("minimum brightness was above or equal to max brightness, this will cause director crash. adjusted values to correct issue")
@@ -53,12 +65,12 @@ function EC.Adjust_backlight_LED_configuration(tParams)
 	}
 	list = trim(list)
 	for deviceID in string.gmatch(tParams["Device List"], '([^,]+)') do
-		local myid = tonumber(deviceID) or 0
-    	if (myid == 0) then break end
+		local numID = tonumber(deviceID) or 0
+    	if (numID == 0) then break end
 		dbg(dump(cmdParams))
-		C4:SendToDevice(myid, "BACKLIGHT_LED_SETTINGS", cmdParams)
+		C4:SendToDevice(numID, "BACKLIGHT_LED_SETTINGS", cmdParams)
 		dbg(dump(curveCommandParams))
-		C4:SendToDevice(myid, "BACKLIGHT_CURVE", curveCommandParams)
+		C4:SendToDevice(numID, "BACKLIGHT_CURVE", curveCommandParams)
 	end
 end
 
@@ -68,6 +80,7 @@ function EC.Adjust_status_LED_configuration(tParams)
 	local maxBrightness = tonumber(tParams["Max LED Brightness"]) or 0
 	local darkRoomThreshold = tonumber(tParams["Dark Room Threshold"]) or 0
 	local brightRoomThreshold = tonumber(tParams["Bright Room Threshold"]) or 0
+	if (list == "") or (minBrightness == "") or (maxBrightness == "") or (darkRoomThreshold == "") or (brightRoomThreshold == "") then dbg("one or more values blank, cancelling") return end
 	if(minBrightness >= maxBrightness) then
 		minBrightness = maxBrightness - 1
 		dbg("minimum brightness was above or equal to max brightness, this will cause director crash. adjusted values to correct issue")
@@ -83,11 +96,11 @@ function EC.Adjust_status_LED_configuration(tParams)
 		MIN_LUX = tonumber(darkRoomThreshold),
 	}
 	for deviceID in string.gmatch(tParams["Device List"], '([^,]+)') do
-		local myid = tonumber(deviceID) or 0
-		dbg("myid: " .. myid)
-    	if (myid == 0) then break end
+		local numID = tonumber(deviceID) or 0
+		dbg("numID: " .. numID)
+    	if (numID == 0) then break end
 		dbg(dump(cmdParams))
-		C4:SendToDevice(myid, "STATUS_LED_SETTINGS", cmdParams)
+		C4:SendToDevice(numID, "STATUS_LED_SETTINGS", cmdParams)
 	end
 end
 
@@ -435,7 +448,6 @@ function dump(o)
 	  colorstr = ValidColor(colorstr) or "000000"
 	  return colorstr
 	else
-	  -- Convert rgb (0,255,0) to "00ff00"
 	  rgb = rgb .. ","
 	  local _, _, r, g, b = rgb:find("(%d-),(%d-),(%d-),")
 	  r = tonumber(r) or 0
@@ -446,7 +458,7 @@ function dump(o)
   end
 
   function trim(s)
-	return s:gsub("^%s*(.-)%s*$", "%1") -- Trim Whitespace...
+	return s:gsub("^%s*(.-)%s*$", "%1")
   end
 
   function ValidColor(strColor)
