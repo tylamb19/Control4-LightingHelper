@@ -64,7 +64,7 @@
     <commands>
       <command>
         <name>Dim all keypad status LEDs</name>
-        <description>Dim all currently on status LEDs on Devices PARAM1 by a factor of PARAM2</description>
+        <description>Dim all currently on status LEDs on devices PARAM1 by a factor of PARAM2</description>
         <params>
           <param>
             <name>Device List</name>
@@ -87,7 +87,7 @@
       </command>
       <command>
         <name>Brighten all keypad status LEDs</name>
-        <description>Brighten all currently on status LEDs on Devices PARAM1 by a factor of PARAM2</description>
+        <description>Brighten all currently on status LEDs on devices PARAM1 by a factor of PARAM2</description>
         <params>
           <param>
             <name>Device List</name>
@@ -110,7 +110,7 @@
       </command>
       <command>
         <name>Replace keypad status LED color</name>
-        <description>Replace the ON Color of any status LED on Devices PARAM1 which matches color PARAM2 with PARAM3</description>
+        <description>Replace the ON and CURRENT color of any status LED on devices PARAM1 which matches color PARAM2 with color PARAM3</description>
         <params>
           <param>
             <name>Device List</name>
@@ -137,7 +137,7 @@
       </command>
       <command>
         <name>Replace lighting status LED color</name>
-        <description>Replace the Color of any status LED on Devices PARAM1 which matches color PARAM2 with PARAM3</description>
+        <description>Replace the ON and CURRENT Color of any status LED on lighting devices PARAM1 which matches color PARAM2 with color PARAM3</description>
         <params>
           <param>
             <name>Device List</name>
@@ -162,7 +162,7 @@
       </command>
       <command>
         <name>Adjust status LED configuration</name>
-        <description>Change the status LED configuration on Devices PARAM1</description>
+        <description>Change the status LED configuration on devices PARAM1 to min brightness of PARAM2 and max brightness of PARAM3, with dark room at PARAM4 and bright room at PARAM5</description>
         <params>
           <param>
             <name>Device List</name>
@@ -208,7 +208,7 @@
       </command>
       <command>
         <name>Adjust backlight LED configuration</name>
-        <description>Change the backlight LED configuration on Devices PARAM1</description>
+        <description>Change the backlight LED configuration on devices PARAM1 to min brightness of PARAM2 and max brightness of PARAM3, with dark room at PARAM4; dim room at PARAM5; bright room at PARAM6 and off in bright room PARAM7</description>
         <params>
           <param>
             <name>Device List</name>
