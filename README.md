@@ -13,7 +13,7 @@ This driver is necessary as the Control4 wired keypads do not report their devic
 
 ### Installation
 
-Head over to the releases page (https://github.com/tylamb19/Control4-LightingHelper/releases) and download the latest .c4z file. Add this driver to your Control4 system, and you should be good to go. The Lighting Helper Wired Companion driver (if needed) is located on its own releases page (https://github.com/tylamb19/Control4-LightingHelperCompanion)
+Head over to the releases page (https://github.com/tylamb19/Control4-LightingHelper/releases) and download the latest .c4z file. Add this driver to your Control4 system, and you should be good to go. The Lighting Helper Wired Companion driver (if needed) is located on its own releases page (https://github.com/tylamb19/Control4-LightingHelperCompanion/releases)
 
 Any questions or issues, please open an issue or pull request at:
 https://github.com/tylamb19/Control4-LightingHelper
