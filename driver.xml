@@ -40,7 +40,7 @@
               </items>
       </property>
       <property>
-        <name>Wireless Ambient Light Devices</name>
+        <name>Ambient Light Devices</name>
         <type>DEVICE_SELECTOR</type>
         <items>
             <item>forward_phase_dimmer.c4i</item>
@@ -52,26 +52,14 @@
             <item>fan_speed_controller.c4i</item>
             <item>0_10v_dimmer.c4i</item>
 	          <item>configurable_keypad.c4i</item>
-        </items>
-        <multiselect>true</multiselect>
-        <readonly>false</readonly>
-      </property>
-      <property>
-        <name>Wired Ambient Light Devices</name>
-        <type>DEVICE_SELECTOR</type>
-        <items>
             <item>control4_wired_keypad.c4i</item>
+            <item>keypad_proxy.c4i</item>
         </items>
         <multiselect>true</multiselect>
         <readonly>false</readonly>
       </property>
     </properties>
-      <actions>
-        <action>
-        <name>Add Wired Keypads</name>
-        <command>Add_Wired_Keypad_Companions</command>
-        <sort_order>0</sort_order>
-      </action>
+    <actions>
     </actions>
     <commands>
     <command>
