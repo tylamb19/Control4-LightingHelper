@@ -3,19 +3,29 @@ OPC = {}
 RFP = {}
 DRV = {}
 REQ = {}
-PersistData["SensorBindings"] = {}
-PersistData["DriverToBindingMapping"] = {}
+
+if (nil == PersistData.SensorBindings) then
+	PersistData["SensorBindings"] = {}
+end
+
+function EC.Add_Wired_Keypad_Companions(tParams)
+	local list = Properties["Wired Ambient Light Devices"]
+	if(list == nil) then return end
+	for deviceID in string.gmatch(list, '([^,]+)') do
+		C4:AddDevice("lighting_helper_companion.c4z", C4:RoomGetId(), C4:GetDeviceDisplayName(tonumber(deviceID)), OnDeviceAdded)
+	end
+end
 
 function RFP.AMBIENT_LIGHT_LEVEL(idBinding, tParams)
-    --for k,v in pairs(tParams) do Dbg:Trace(tostring(k) .. '=' .. tostring(v)) end
+    dbg(dump(tParams))
     dbg(string.format('Level received: %s, target: %s, group: %s', tostring(tParams.LEVEL), tostring(tParams.TARGET), tostring(tParams.GROUP)))
 	local deviceID = tostring(tonumber(tParams.GROUP) + 1)
 	deviceID = deviceID:sub(-3)
-	C4:SetVariable(tostring(PersistData["SensorBindings"][tostring(deviceID)] .. " Value"), tParams.LEVEL)
+	C4:SetVariable(tostring(PersistData["SensorBindings"][tostring(deviceID)]["NAME"] .. " Value"), tParams.LEVEL)
 end
 
 function EC.AMBIENT_LIGHT_LEVEL(tParams)
-    RFP.AMBIENT_LIGHT_LEVEL(0, tParams)
+    RFP.AMBIENT_LIGHT_LEVEL(nil, tParams)
 end
 
 function EC.Set_backlight_color(tParams)
@@ -301,25 +311,62 @@ function OPC.Driver_Version(tParams)
 	C4:UpdateProperty("Driver Version",tostring(C4:GetDeviceData(C4:GetDeviceID(), "version")))
 end
 
-function OPC.Ambient_Light_Devices(tParams)
+function OPC.Wireless_Ambient_Light_Devices(tParams)
     dbg("device update time" .. dump(tParams))
     for deviceID in string.gmatch(tParams, '([^,]+)') do
         local bindingName = C4:GetDeviceDisplayName(tonumber(deviceID)) .. " Light Sensor"
         local bindingNumber = deviceID:sub(-3)
-		if((string.find(Properties["Ambient Light Devices"],bindingNumber) ~= nil) and (PersistData["SensorBindings"][tostring(bindingNumber)] == nil)) then
+		if(((string.find(Properties["Wireless Ambient Light Devices"],bindingNumber) or string.find(Properties["Wired Ambient Light Devices"],bindingNumber)) ~= nil) and (PersistData["SensorBindings"][tostring(bindingNumber)] == nil)) then
 			dbg("adding binding" .. bindingNumber)
 			C4:AddDynamicBinding(tonumber(bindingNumber) or 0, "CONTROL", false, bindingName, "AMBIENT_LEVEL", false, false)
-        	PersistData["SensorBindings"][bindingNumber] = bindingName
-			C4:AddVariable(PersistData["SensorBindings"][bindingNumber] .. " Value", "", "INT", true, false)
+			local bindingData = {
+				NAME = bindingName,
+				NUMBER = bindingNumber,
+				TYPE = "wireless"
+			}
+        	PersistData["SensorBindings"][bindingNumber] = bindingData
+			C4:AddVariable(PersistData["SensorBindings"][bindingNumber]["NAME"] .. " Value", "", "INT", true, false)
 		else
 			dbg("doing nothing for binding" .. bindingNumber)
 		end
     end
 	for k, _ in pairs(PersistData["SensorBindings"]) do
 		local bindingNumber = k:sub(-3)
-		if((PersistData["SensorBindings"][tostring(bindingNumber)] ~= nil) and (string.find(Properties["Ambient Light Devices"],bindingNumber) == nil)) then
+		if((PersistData["SensorBindings"][tostring(bindingNumber)] ~= nil) and ((string.find(Properties["Wireless Ambient Light Devices"],bindingNumber) or string.find(Properties["Wired Ambient Light Devices"],bindingNumber)) == nil)) then
 			dbg("removing binding" .. bindingNumber)
-			C4:DeleteVariable(PersistData["SensorBindings"][bindingNumber] .. " Value")
+			C4:DeleteVariable(PersistData["SensorBindings"][bindingNumber]["NAME"] .. " Value" or "")
+			PersistData["SensorBindings"][bindingNumber] = nil
+			C4:RemoveDynamicBinding(tonumber(bindingNumber) or 0)
+		else
+			dbg("doing nothing for binding" .. bindingNumber)
+		end
+	end
+end
+
+function OPC.Wired_Ambient_Light_Devices(tParams)
+    dbg("device update time" .. dump(tParams))
+    for deviceID in string.gmatch(tParams, '([^,]+)') do
+        local bindingName = C4:GetDeviceDisplayName(tonumber(deviceID)) .. " Light Sensor"
+        local bindingNumber = deviceID:sub(-3)
+		if(((string.find(Properties["Wireless Ambient Light Devices"],bindingNumber) or string.find(Properties["Wired Ambient Light Devices"],bindingNumber)) ~= nil) and (PersistData["SensorBindings"][tostring(bindingNumber)] == nil)) then
+			dbg("adding binding" .. bindingNumber)
+			C4:AddDynamicBinding(tonumber(bindingNumber) or 0, "CONTROL", false, bindingName, "AMBIENT_LEVEL_COMPANION", false, false)
+        	local bindingData = {
+				NAME = bindingName,
+				NUMBER = bindingNumber,
+				TYPE = "wired"
+			}
+        	PersistData["SensorBindings"][bindingNumber] = bindingData
+			C4:AddVariable(PersistData["SensorBindings"][bindingNumber]["NAME"] .. " Value", "", "INT", true, false)
+		else
+			dbg("doing nothing for binding" .. bindingNumber)
+		end
+    end
+	for k, _ in pairs(PersistData["SensorBindings"]) do
+		local bindingNumber = k:sub(-3)
+		if((PersistData["SensorBindings"][tostring(bindingNumber)] ~= nil) and ((string.find(Properties["Wireless Ambient Light Devices"],bindingNumber) or string.find(Properties["Wired Ambient Light Devices"],bindingNumber)) == nil)) then
+			dbg("removing binding" .. bindingNumber)
+			C4:DeleteVariable(PersistData["SensorBindings"][bindingNumber]["NAME"] .. " Value" or "")
 			PersistData["SensorBindings"][bindingNumber] = nil
 			C4:RemoveDynamicBinding(tonumber(bindingNumber) or 0)
 		else
@@ -417,20 +464,23 @@ end
 
 function OnDriverLateInit(init)
 	dbg("--driver late init--")
-
 	for property, _ in pairs(Properties) do
 		OnPropertyChanged(property)
 	end
-	for id, name in pairs(PersistData["SensorBindings"]) do
-		dbg(name)
-		if(Variables[name] == nil) then
-			C4:AddVariable(name .. " Value", "", "INT", true, false)
+	for _, table in pairs(PersistData["SensorBindings"]) do
+		dbg(table.NAME)
+		if(Variables[table.NAME .. " Value"] == nil) then
+			C4:AddVariable(table.NAME .. " Value", "", "INT", true, false)
 		end
 	end
 end
 
 function OnBindingChanged(idBinding, strClass, bIsBound)
 	dbg("--change binding--")
+end
+
+function OnDeviceAdded()
+	dbg("--device added--")
 end
 
 function dump(o)
@@ -484,13 +534,15 @@ function dump(o)
 	  return strValues
   end
 
- if (PersistData ~= nil) then
-    for key,value in pairs(PersistData["SensorBindings"]) do
-        C4:AddDynamicBinding(key, "CONTROL", false, value, "AMBIENT_LEVEL", false, false)
-    end
-  end
 
   function dbg(strDebugText)
 	if (gDbgPrint) then print(strDebugText) end
 	if (gDbgLog) then C4:DebugLog("\r\n" .. strDebugText) end
   end
+
+  if (PersistData.SensorBindings ~= nil) then
+	for key,value in pairs(PersistData["SensorBindings"]) do
+		if(value.TYPE == "wireless") then C4:AddDynamicBinding(value.NUMBER, "CONTROL", false, tostring(value.NAME), "AMBIENT_LEVEL", false, false) end
+		if(value.TYPE == "wired") then C4:AddDynamicBinding(value.NUMBER, "CONTROL", false, tostring(value.NAME), "AMBIENT_LEVEL_COMPANION", false, false) end
+	end
+end
